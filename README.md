@@ -2,7 +2,7 @@
 
 ![Build Status](https://img.shields.io/npm/v/npm?style=plastic)
 
-This module includes a component to render LateX formulas in React Native.
+This module includes a component to render LateX formulas in React Native App.
 This is based on the API to `http://sciencesoft.at/`
 
 ## **Installation**

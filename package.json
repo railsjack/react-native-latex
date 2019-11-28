@@ -1,7 +1,7 @@
 {
     "name": "react-native-latex",
-    "version": "0.0.3",
-    "description": "React Native - calendar for selecting halfday from there.",
+    "version": "0.0.4",
+    "description": "React Native - Component to render LateX formulas in React Native App",
     "license": "MIT",
     "main": "src/index.js",
     "author": "jinnahrae@gmail.com",
