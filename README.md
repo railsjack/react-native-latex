@@ -21,4 +21,3 @@ import Latex from 'react-native-latex';
 \frac{1}{2\pi}\int_{-\infty}^{\infty}e^{-\frac{x^2}{2}}dx
 </Latex>
 ```
-
