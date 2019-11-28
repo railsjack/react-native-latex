@@ -1,6 +1,6 @@
 {
     "name": "react-native-latex",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "React Native - calendar for selecting halfday from there.",
     "license": "MIT",
     "main": "src/index.js",
