@@ -1,0 +1,23 @@
+{
+    "name": "react-native-latex",
+    "version": "0.0.1",
+    "description": "React Native - calendar for selecting halfday from there.",
+    "license": "MIT",
+    "main": "src/index.js",
+    "author": "jinnahrae@gmail.com",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/railsjack/halfday-calendar"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "keywords": [
+        "latex",
+        "React",
+        "Native"
+    ],
+    "dependencies": {
+        
+    }
+}
