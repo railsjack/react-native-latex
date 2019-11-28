@@ -17,7 +17,10 @@ The solution is implemented in JavaScript so no native module linking is require
 ```
 import Latex from 'react-native-latex';
 
-<Latex>
-\frac{1}{2\pi}\int_{-\infty}^{\infty}e^{-\frac{x^2}{2}}dx
+<Latex style={{
+  width: '100%',
+  height: 100
+}}>
+  {"\\frac{1}{2\\pi}\\int_{-\\infty}^{\\infty}e^{-\\frac{x^2}{2}}dx"}
 </Latex>
 ```
