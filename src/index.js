@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FastImage from 'react-native-fast-image';
-
+import {Image} from 'react-native'
 
 const API_URL = 'http://sciencesoft.at/image/latexurl/image.png?dpi=600&src=';
 
@@ -10,7 +10,10 @@ class Latex extends Component {
   }
 
   state = {
-    latexURL: ''
+    latexURL: '',
+    gotSize: false,
+    width: 1,
+    height: 1,
   }
 
   componentDidMount() {
@@ -19,12 +22,25 @@ class Latex extends Component {
     }
   }
 
+  onLoad = (event) => {
+    const { width, height } = event.nativeEvent.source;
+    this.setState({ gotSize: true, 
+      width: width * this.props.height/height, 
+      height: this.props.height });
+    this.props.onLoad && this.props.onLoad(event);
+  }
+
   render() {
-    return (this.state.latexURL ?
-      <FastImage
-          style={this.props.style}
-          resizeMode={FastImage.resizeMode.contain}
-          source={{ uri: this.state.latexURL }} />
+    const { gotSize, width, height, latexURL } = this.state;
+    return (latexURL ?
+      <Image
+        onLoad={this.onLoad}
+        style={[{resizeMode: 'contain'}, this.props.style, gotSize ? {
+          width,
+          height
+        } : {width: 1, height: 1}]}
+        resizeMode={FastImage.resizeMode.contain}
+        source={{ uri: latexURL }} />
       : null
     )
   }
