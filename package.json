@@ -1,6 +1,6 @@
 {
     "name": "react-native-latex",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "React Native - Component to render LateX formulas in React Native App",
     "license": "MIT",
     "main": "src/index.js",
