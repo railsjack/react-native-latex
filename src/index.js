@@ -1,51 +1,86 @@
-import React, { Component } from "react";
-import FastImage from 'react-native-fast-image';
-import { Image } from 'react-native'
+import React from 'react';
+import { View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
-const API_URL = 'http://sciencesoft.at/image/latexurl/image.png?dpi=200&src=';
+const defaultOptions = {
+  messageStyle: 'none',
+  extensions: ['tex2jax.js'],
+  jax: ['input/TeX', 'output/HTML-CSS'],
+  tex2jax: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+  },
+  TeX: {
+    extensions: ['AMSmath.js', 'AMSsymbols.js', 'noErrors.js', 'noUndefined.js']
+  }
+};
 
-class Latex extends Component {
+class MathJax extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      height: 1,
+      width: 1,
+      opacity: 0,
+    };
   }
 
-  state = {
-    latexURL: '',
-    gotSize: false,
-    width: 1,
-    height: 1,
-  }
-
-  componentDidMount() {
-    if (typeof this.props.children === 'string') {
-      this.setState({ latexURL: API_URL + this.props.children })
+  handleMessage(message) {
+    try {
+      const { width, height } = JSON.parse(message.nativeEvent.data);
+      this.setState({
+        width,
+        height,
+      });
+    } catch (error) {
+      console.log('error on displaying latex')
     }
   }
 
-  onLoad = (event) => {
-    const { width, height } = event.nativeEvent.source;
-    this.setState({
-      gotSize: true,
-      width: height < this.props.height ? width : (width / height) * this.props.height,
-      height: height < this.props.height ? this.props.minHeight : this.props.height
-    });
-    this.props.onLoad && this.props.onLoad(event);
-  }
+  wrapMathjax(content) {
+    const options = JSON.stringify(
+      Object.assign({}, defaultOptions, this.props.mathJaxOptions)
+    );
 
+		return `
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <script type="text/x-mathjax-config">
+        MathJax.Hub.Config(${options});
+				MathJax.Hub.Queue(function() {
+          var width = document.documentElement.scrollWidth;
+          var height = document.documentElement.scrollHeight;
+					window.ReactNativeWebView.postMessage(JSON.stringify({width: width, height: height}));
+				});
+      </script>
+      
+      <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
+        overflow: hidden;
+      }
+      </style>
+      <script async src="./MathJax/MathJax.js"></script>
+      <body onselectstart="return false" ontouchstart="return false" scroll="no">
+			${content}
+		`;
+  }
   render() {
-    const { gotSize, width, height, latexURL } = this.state;
-    return (latexURL ?
-      <Image
-        onLoad={this.onLoad}
-        style={[{ resizeMode: 'contain' }, this.props.style, gotSize ? {
-          width,
-          height
-        } : { width: 1, height: 1 }]}
-        resizeMode={FastImage.resizeMode.contain}
-        source={{ uri: latexURL }} />
-      : null
-    )
+    const html = this.wrapMathjax(this.props.html);
+    const props = Object.assign({}, this.props, { html: undefined });
+    return (
+      <View style={{ width: this.state.width, height: this.state.height, ...props.style, }}>
+        <WebView
+          style={{ backgroundColor: 'transparent' }}
+          scrollEnabled={false}
+          onMessage={this.handleMessage.bind(this)}
+          source={{ html }}
+        />
+      </View>
+    );
   }
 }
 
-export default Latex;
+export default MathJax;
